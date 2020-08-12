@@ -1,5 +1,7 @@
 package com.lambdaschool.crudyorders.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +35,17 @@ public class Customer
 
     private String phone;
 
+
     @ManyToOne
     @JoinColumn(name = "agentcode",
         nullable = false) // primary key inside of agent, sql handles in relational DB
+    @JsonIgnoreProperties("agent")
     private Agent agent; // java handles as object
 
     @OneToMany(mappedBy = "customer",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+    @JsonIgnoreProperties("customer")
     private List<Order> orders = new ArrayList<>();
 
     // Constructors
@@ -184,5 +189,25 @@ public class Customer
     public void setPhone(String phone)
     {
         this.phone = phone;
+    }
+
+    public List<Order> getOrders()
+    {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders)
+    {
+        this.orders = orders;
+    }
+
+    public Agent getAgent()
+    {
+        return agent;
+    }
+
+    public void setAgent(Agent agent)
+    {
+        this.agent = agent;
     }
 }

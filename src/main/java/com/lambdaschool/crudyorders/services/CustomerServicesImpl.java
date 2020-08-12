@@ -1,6 +1,9 @@
 package com.lambdaschool.crudyorders.services;
 
+import com.lambdaschool.crudyorders.models.Agent;
 import com.lambdaschool.crudyorders.models.Customer;
+import com.lambdaschool.crudyorders.models.Order;
+import com.lambdaschool.crudyorders.repositories.AgentsRepository;
 import com.lambdaschool.crudyorders.repositories.CustomersRepository;
 import com.lambdaschool.crudyorders.views.OrderCounts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,10 @@ import java.util.List;
 public class CustomerServicesImpl implements CustomerServices
 {
     @Autowired
-    CustomersRepository custrepos;
+    private CustomersRepository custrepos;
+
+    @Autowired
+    private AgentsRepository agentrepos;
 
     @Override
     public List<Customer> findAllCustomers()
@@ -51,6 +57,46 @@ public class CustomerServicesImpl implements CustomerServices
     @Override
     public Customer save(Customer customer)
     {
-        return custrepos.save(customer);
+        Customer newCustomer = new Customer(); // create new blank obj
+
+        if (customer.getCustcode() != 0)
+        {
+            custrepos.findById(customer.getCustcode())
+                .orElseThrow(() -> new EntityNotFoundException("Customer " + customer.getCustcode() + " Not Found!"));
+
+            newCustomer.setCustcode(customer.getCustcode());
+        }
+
+        // runs through setter so any validation we have in setter happens
+        newCustomer.setCustname(customer.getCustname());
+        newCustomer.setCustcity(customer.getCustcity());
+        newCustomer.setWorkingarea(customer.getWorkingarea());
+        newCustomer.setCustcountry(customer.getCustcountry());
+        newCustomer.setGrade(customer.getGrade());
+        newCustomer.setOpeningamt(customer.getOpeningamt());
+        newCustomer.setReceiveamt(customer.getReceiveamt());
+        newCustomer.setPaymentamt(customer.getPaymentamt());
+        newCustomer.setOutstandingamt(customer.getOutstandingamt());
+        newCustomer.setPhone(customer.getPhone());
+        newCustomer.setAgent(customer.getAgent());
+
+        // one to many - orders
+        newCustomer.getOrders().clear();
+        for(Order o : customer.getOrders())
+        {
+            Order newOrder = new Order();
+            newOrder.setOrdamount(o.getOrdamount());
+            newOrder.setAdvanceamount(o.getAdvanceamount());
+            newOrder.setOrderdescription(o.getOrderdescription());
+            newOrder.setCustomer(newCustomer); // associated order item w customer
+            newCustomer.getOrders().add(newOrder); // associated customer w order item
+        }
+
+        // many to one agent
+        Agent newAgent = agentrepos.findById(newCustomer.getAgent().getAgentcode())
+            .orElseThrow(()-> new EntityNotFoundException("Agent " + newCustomer.getAgent().getAgentcode() + " Not Found"));
+        newCustomer.setAgent(newAgent);
+
+        return custrepos.save(newCustomer);
     }
 }

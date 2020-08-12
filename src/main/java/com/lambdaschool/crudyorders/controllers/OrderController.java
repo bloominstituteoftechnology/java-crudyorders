@@ -24,4 +24,12 @@ public class OrderController
         Order myOrder = orderServices.findByOrderNum(ordnum);
         return new ResponseEntity<>(myOrder, HttpStatus.OK);
     }
+
+    // POST http://localhost:2019/orders/order - adds a new order to an existing customer
+
+
+    // PUT http://localhost:2019/orders/order/{ordernum} - completely replaces the given order record
+
+
+    // DELETE http://localhost:2019/orders/order/{ordername} - deletes the given order
 }

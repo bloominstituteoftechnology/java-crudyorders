@@ -25,12 +25,20 @@ public class Customer
 
     private String grade;
 
+    @Transient // field hasvalueforopeningamt never gets saved in DB, only use locally
+    public boolean hasvalueforopeningamt;
     private double openingamt;
 
+    @Transient
+    public boolean hasvalueforreceiveamt;
     private double receiveamt;
 
+    @Transient
+    public boolean hasvalueforpaymentamt;
     private double paymentamt;
 
+    @Transient
+    public boolean hasvalueforoutstandingamt;
     private double outstandingamt;
 
     private String phone;
@@ -148,6 +156,7 @@ public class Customer
 
     public void setOpeningamt(double openingamt)
     {
+        hasvalueforopeningamt = true;
         this.openingamt = openingamt;
     }
 
@@ -158,6 +167,7 @@ public class Customer
 
     public void setReceiveamt(double receiveamt)
     {
+        hasvalueforreceiveamt = true;
         this.receiveamt = receiveamt;
     }
 
@@ -168,6 +178,7 @@ public class Customer
 
     public void setPaymentamt(double paymentamt)
     {
+        hasvalueforpaymentamt = true;
         this.paymentamt = paymentamt;
     }
 
@@ -178,6 +189,7 @@ public class Customer
 
     public void setOutstandingamt(double outstandingamt)
     {
+        hasvalueforoutstandingamt = true;
         this.outstandingamt = outstandingamt;
     }
 

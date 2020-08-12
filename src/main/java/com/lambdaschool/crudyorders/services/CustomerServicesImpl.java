@@ -109,9 +109,99 @@ public class CustomerServicesImpl implements CustomerServices
             custrepos.deleteById(id);
         } else
         {
-            throw new EntityNotFoundException("Restaurant " + id + " Not Found");
+            throw new EntityNotFoundException("Customer " + id + " Not Found");
         }
 
     }
 
+    @Transactional
+    @Override
+    public Customer update(Customer customer, long id)
+    {
+        Customer currentCustomer = custrepos.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Customer " + id + " Not Found!"));
+
+        // if I got sent one, set current rest name to be that name
+        if (customer.getCustname() != null)
+        {
+            currentCustomer.setCustname(customer.getCustname());
+        }
+
+        if (customer.getCustcity() != null)
+        {
+            currentCustomer.setCustcity(customer.getCustcity());
+        }
+
+        if (customer.getWorkingarea() != null)
+        {
+            currentCustomer.setWorkingarea(customer.getWorkingarea());
+        }
+
+        if (customer.getCustcountry() != null)
+        {
+            currentCustomer.setCustcountry(customer.getCustcountry());
+        }
+
+        if (customer.getGrade() != null)
+        {
+            currentCustomer.setGrade(customer.getGrade());
+        }
+
+        if (customer.getPhone() != null)
+        {
+            currentCustomer.setPhone(customer.getPhone());
+        }
+
+        if (customer.getAgent() != null)
+        {
+            currentCustomer.setAgent(customer.getAgent());
+        }
+
+        if (customer.hasvalueforopeningamt)
+        {
+            currentCustomer.setOpeningamt(customer.getOpeningamt());
+        }
+
+        if (customer.hasvalueforreceiveamt)
+        {
+            currentCustomer.setReceiveamt(customer.getReceiveamt());
+        }
+
+        if (customer.hasvalueforpaymentamt)
+        {
+            currentCustomer.setPaymentamt(customer.getPaymentamt());
+        }
+
+        if (customer.hasvalueforoutstandingamt)
+        {
+            currentCustomer.setOutstandingamt(customer.getOutstandingamt());
+        }
+
+        // one to many - orders
+        if (customer.getOrders()
+            .size() > 0)
+        {
+            currentCustomer.getOrders()
+                .clear();
+            for (Order o : customer.getOrders())
+            {
+                Order newOrder = new Order();
+                newOrder.setOrdamount(o.getOrdamount());
+                newOrder.setAdvanceamount(o.getAdvanceamount());
+                newOrder.setOrderdescription(o.getOrderdescription());
+                newOrder.setCustomer(currentCustomer);
+                currentCustomer.getOrders()
+                    .add(newOrder);
+            }
+        }
+
+        // many to one agent
+        Agent newAgent = agentrepos.findById(currentCustomer.getAgent()
+            .getAgentcode())
+            .orElseThrow(() -> new EntityNotFoundException("Agent " + currentCustomer.getAgent()
+                .getAgentcode() + " Not Found"));
+        currentCustomer.setAgent(newAgent);
+
+        return custrepos.save(currentCustomer);
+    }
 }

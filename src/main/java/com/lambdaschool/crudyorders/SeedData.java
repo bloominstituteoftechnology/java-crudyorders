@@ -1,6 +1,7 @@
 package com.lambdaschool.crudyorders;
 
-import com.github.javafaker.Faker;
+// import com.github.javafaker.Faker;
+
 import com.lambdaschool.crudyorders.models.Agent;
 import com.lambdaschool.crudyorders.models.Customer;
 import com.lambdaschool.crudyorders.models.Order;
@@ -14,49 +15,48 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
-
 
 @Transactional
 @Component
 public class SeedData implements CommandLineRunner
 {
-    /**
-     * Connects the customer table to this SeedData method
-     */
+    //*
+    //     * Connects the customer table to this SeedData method
+
+
     @Autowired
     private CustomersRepository custrepos;
 
-    /**
-     * Connects the agents table to this SeedData method
-     */
+    //*
+    //     * Connects the agents table to this SeedData method
+
+
     @Autowired
     private AgentsRepository agentrepos;
 
-    /**
-     * Connects the orders table to this SeedData method
-     */
+    //*
+    //     * Connects the orders table to this SeedData method
+
+
     @Autowired
     private OrdersRepository ordersrepos;
 
-    /**
-     * Connects the payment table to this SeedData method
-     */
+    /*
+     * Connects the payment table to this SeedData method*/
+
+
     @Autowired
     private PaymentRepository paymentrepos;
 
-    /**
-     * Generates test, seed data for our application
+    /*     * Generates test, seed data for our application
      * First a set of known data is seeded into our database.
      * Second a random set of data using Java Faker is seeded into our database.
      * Note this process does not remove data from the database. So if data exists in the database
      * prior to running this process, that data remains in the database.
      *
-     * @param args The parameter is required by the parent interface but is not used in this process.
-     */
+     * @param args The parameter is required by the parent interface but is not used in this process.*/
+
+
     @Transactional
     @Override
     public void run(String[] args) throws Exception

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -80,4 +81,10 @@ public class CustomerController
 
 
     // DELETE http://localhost:2019/customers/customer/{custcode} - Deletes the given customer including any associated orders
+    @DeleteMapping(value = "/customer/{custcode}")
+    public ResponseEntity<?> deleteCustomerById(@PathVariable long custcode)
+    {
+        customerServices.delete(custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

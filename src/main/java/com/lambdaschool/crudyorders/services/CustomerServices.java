@@ -16,4 +16,6 @@ public interface CustomerServices
     List<OrderCounts> getOrderCounts();
 
     Customer save(Customer customer);
+
+    void delete(long id);
 }

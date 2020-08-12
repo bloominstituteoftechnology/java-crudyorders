@@ -99,4 +99,19 @@ public class CustomerServicesImpl implements CustomerServices
 
         return custrepos.save(newCustomer);
     }
+
+    @Transactional
+    @Override
+    public void delete(long id)
+    {
+        if (custrepos.findById(id).isPresent()) // did it find id in our list
+        {
+            custrepos.deleteById(id);
+        } else
+        {
+            throw new EntityNotFoundException("Restaurant " + id + " Not Found");
+        }
+
+    }
+
 }

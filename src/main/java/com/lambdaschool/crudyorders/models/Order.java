@@ -14,8 +14,12 @@ public class Order
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long ordnum; // primary key
 
+    @Transient
+    public boolean hasvalueforordamount;
     private double ordamount;
 
+    @Transient
+    public boolean hasvalueforadvanceamount;
     private double advanceamount;
 
     private String orderdescription;
@@ -69,6 +73,7 @@ public class Order
 
     public void setOrdamount(double ordamount)
     {
+        hasvalueforordamount = true;
         this.ordamount = ordamount;
     }
 
@@ -79,6 +84,7 @@ public class Order
 
     public void setAdvanceamount(double advanceamount)
     {
+        hasvalueforadvanceamount = true;
         this.advanceamount = advanceamount;
     }
 

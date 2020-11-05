@@ -38,4 +38,30 @@ public class OrderController
         return new ResponseEntity<>(o,
             HttpStatus.OK);
     }
+
+    @PostMapping(value = "/order", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> addOrder(@Valid @RequestBody Restaurant newOrder) {
+        newOrder.setOrderid(0);
+        newOrder = orderServices.save(newOrder);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newRestaurantURI = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{custid}")
+            .buildAndExpand(newOrder.getOrderid())
+            .toUri();
+        responseHeaders.setLocation(newOrderURI);
+        return new ResponseEntity<>(newOrder, responseHeaders, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/order/{ordernum}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> replaceOrderByNum(@PathVariable long ordernum, @Valid @RequestBody Restaurant updateOrder) {
+        updateOrder.setOrderid(ordernum);
+        updateOrder = orderServices.save(updateOrder);
+        return new ResponseEntity<>(updateRestaurant, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/order/{ordername}")
+    public ResponseEntity<?> deleteOrderByName(@PathVariable String ordername) {
+        orderServices.delete(ordername);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

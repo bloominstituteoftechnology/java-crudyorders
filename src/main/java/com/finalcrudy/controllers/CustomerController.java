@@ -49,4 +49,44 @@ public class CustomerController
         return new ResponseEntity<>(myCustomerList,
             HttpStatus.OK);
     }
+
+    @PostMapping(value = "/customer",
+        consumes = "application/json",
+        produces = "application/json")
+    public ResponseEntity<?> addCustomer(
+        @Valid
+        @RequestBody
+            Customer newCustomer)
+    {
+        newCustomer.setCustomerid(0);
+        newCustomer = customerServices.save(newCustomer);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{custid}")
+            .buildAndExpand(newCustomer.getCustomerid())
+            .toUri();
+        responseHeaders.setLocation(newCustomerURI);
+        return new ResponseEntity<>(newCustomer,
+            responseHeaders,
+            HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/customer/{custcode}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> replaceCustomerByCode(@PathVariable long custcode, @Valid @RequestBody Customer updateCustomer) {
+        updateCustomer.setCustomercode(custcode);
+        updateCustomer = customerServices.save(updateCustomer);
+        return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "customer/{custcode}", consumes = "application/json")
+    public ResponseEntity<?> updateCustomerByCode(@PathVariable long custcode, @RequestBody Restaurant updateCustomer) {
+        customerServices.update(updateCustomer, custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/customer/{custcode}")
+    public ResponseEntity<?> deleteCustomerByCode(@PathVariable long custcode) {
+        customerServices.delete(custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

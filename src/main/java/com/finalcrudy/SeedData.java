@@ -38,7 +38,7 @@ public class SeedData
     private PaymentRepository paymentrepos;
 
     private Random random = new Random();
-    
+
     @Transactional
     @Override
     public void run(String[] args) throws

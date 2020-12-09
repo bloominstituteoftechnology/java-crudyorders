@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 @Service(value = "customersService")
 public class CustomerServiceImpl
-    implements CustomerService
+    implements CustomerServices
 {
 
     @Autowired

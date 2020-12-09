@@ -5,10 +5,7 @@ import com.finalcrudy.services.CustomerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class CustomerController
         @PathVariable
             long custid)
     {
-        Customer c = customersService.findCustomersById(custid);
+        Customer c = customerServices.findCustomersById(custid);
         return new ResponseEntity<>(c,
             HttpStatus.OK);
     }
@@ -45,8 +42,48 @@ public class CustomerController
         @PathVariable
             String custname)
     {
-        List<Customer> myCustomerList = customersService.findByCustomerName(custname);
+        List<Customer> myCustomerList = customerServices.findByCustomerName(custname);
         return new ResponseEntity<>(myCustomerList,
             HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/customer",
+        consumes = "application/json",
+        produces = "application/json")
+    public ResponseEntity<?> addCustomer(
+        @Valid
+        @RequestBody
+            Customer newCustomer)
+    {
+        newCustomer.setCustomerid(0);
+        newCustomer = customerServices.save(newCustomer);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{custid}")
+            .buildAndExpand(newCustomer.getCustomerid())
+            .toUri();
+        responseHeaders.setLocation(newCustomerURI);
+        return new ResponseEntity<>(newCustomer,
+            responseHeaders,
+            HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/customer/{custcode}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> replaceCustomerByCode(@PathVariable long custcode, @Valid @RequestBody Customer updateCustomer) {
+        updateCustomer.setCustomercode(custcode);
+        updateCustomer = customerServices.save(updateCustomer);
+        return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "customer/{custcode}", consumes = "application/json")
+    public ResponseEntity<?> updateCustomerByCode(@PathVariable long custcode, @RequestBody Restaurant updateCustomer) {
+        customerServices.update(updateCustomer, custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/customer/{custcode}")
+    public ResponseEntity<?> deleteCustomerByCode(@PathVariable long custcode) {
+        customerServices.delete(custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

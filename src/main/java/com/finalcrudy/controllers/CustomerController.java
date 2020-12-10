@@ -30,13 +30,13 @@ public class CustomerController
             HttpStatus.OK);
     }
 
-    @GetMapping(value = "/customer/{custid}",
+    @GetMapping(value = "/customer/{custcode}",
         produces = {"application/json"})
-    public ResponseEntity<?> getCustomerById(
+    public ResponseEntity<?> getCustomerByCode(
         @PathVariable
-            long custid)
+            long custcode)
     {
-        Customer c = customerService.findCustomersById(custid);
+        Customer c = customerService.findCustomersById(custcode);
         return new ResponseEntity<>(c,
             HttpStatus.OK);
     }
@@ -55,12 +55,12 @@ public class CustomerController
     @PostMapping(value = "/customer", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer newCustomer)
     {
-        newCustomer.setCustomerid(0);
+        newCustomer.setCustcode(0);
         newCustomer = customerService.save(newCustomer);
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{custid}")
-            .buildAndExpand(newCustomer.getCustomerid())
+            .path("/{custcode}")
+            .buildAndExpand(newCustomer.getCustcode())
             .toUri();
         responseHeaders.setLocation(newCustomerURI);
         return new ResponseEntity<>(newCustomer, responseHeaders, HttpStatus.CREATED);
@@ -68,13 +68,13 @@ public class CustomerController
 
     @PutMapping(value = "/customer/{custcode}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> replaceCustomerByCode(@PathVariable long custcode, @Valid @RequestBody Customer updateCustomer) {
-        updateCustomer.setCustomercode(custcode);
+        updateCustomer.setCustcode(custcode);
         updateCustomer = customerService.save(updateCustomer);
         return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
     }
 
     @PatchMapping(value = "customer/{custcode}", consumes = "application/json")
-    public ResponseEntity<?> updateCustomerByCode(@PathVariable long custcode, @RequestBody Restaurant updateCustomer) {
+    public ResponseEntity<?> updateCustomerByCode(@PathVariable long custcode, @RequestBody Customer updateCustomer) {
         customerService.update(updateCustomer, custcode);
         return new ResponseEntity<>(HttpStatus.OK);
     }

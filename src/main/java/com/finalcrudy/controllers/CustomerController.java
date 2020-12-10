@@ -1,0 +1,87 @@
+package com.finalcrudy.controllers;
+
+import com.finalcrudy.models.Customer;
+import com.finalcrudy.services.CustomerServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.net.URI;
+
+
+@RestController
+@RequestMapping("/customers")
+public class CustomerController
+{
+    @Autowired
+    private CustomerServices customerService;
+
+    @GetMapping(value = "/orders",
+        produces = {"application/json"})
+    public ResponseEntity<?> listAllCustomers()
+    {
+        List<Customer> myCustomers = customerService.findAllCustomers();
+        return new ResponseEntity<>(myCustomers,
+            HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/customer/{custcode}",
+        produces = {"application/json"})
+    public ResponseEntity<?> getCustomerByCode(
+        @PathVariable
+            long custcode)
+    {
+        Customer c = customerService.findCustomersById(custcode);
+        return new ResponseEntity<>(c,
+            HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/namelike/{custname}",
+        produces = {"application/json"})
+    public ResponseEntity<?> findCustomerByName(
+        @PathVariable
+            String custname)
+    {
+        List<Customer> myCustomerList = customerService.findByCustomerName(custname);
+        return new ResponseEntity<>(myCustomerList,
+            HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/customer", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> addCustomer(@Valid @RequestBody Customer newCustomer)
+    {
+        newCustomer.setCustcode(0);
+        newCustomer = customerService.save(newCustomer);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{custcode}")
+            .buildAndExpand(newCustomer.getCustcode())
+            .toUri();
+        responseHeaders.setLocation(newCustomerURI);
+        return new ResponseEntity<>(newCustomer, responseHeaders, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/customer/{custcode}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> replaceCustomerByCode(@PathVariable long custcode, @Valid @RequestBody Customer updateCustomer) {
+        updateCustomer.setCustcode(custcode);
+        updateCustomer = customerService.save(updateCustomer);
+        return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "customer/{custcode}", consumes = "application/json")
+    public ResponseEntity<?> updateCustomerByCode(@PathVariable long custcode, @RequestBody Customer updateCustomer) {
+        customerService.update(updateCustomer, custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/customer/{custcode}")
+    public ResponseEntity<?> deleteCustomerByCode(@PathVariable long custcode) {
+        customerService.delete(custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

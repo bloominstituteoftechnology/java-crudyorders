@@ -1,10 +1,16 @@
 package com.finalcrudy.repositories;
 
 import com.finalcrudy.models.Customer;
-import com.finalcrudy.repositories.CustomerRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface CustomerRepository
-    extends CrudRepository<Customer, Long>
+import java.util.List;
+
+public interface CustomerRepository extends CrudRepository<Customer, Long>
 {
+    Customer findByCustcode(long custcode);
+
+    List<Customer> findByCustnameContainingIgnoringCase(String custname);
+
+
 }

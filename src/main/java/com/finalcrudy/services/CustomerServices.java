@@ -10,13 +10,9 @@ public interface CustomerServices
 
     List<Customer> findAllCustomers();
 
-
-    List<Customer> findByCustomerName(String custname);
+    List<Customer> findByCustname(String custname);
 
     List<Customer> findCustomerByCode(long custcode);
-
-
-    Customer findCustomersById(long id);
 
     Customer save(Customer customer); //POST
 

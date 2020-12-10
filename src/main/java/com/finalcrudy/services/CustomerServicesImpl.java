@@ -42,13 +42,13 @@ public class CustomerServiceImpl
     }
 
     @Override
-    public List<Customer> findByCustName(String custname)
+    public List<Customer> findByCustname(String custname)
     {
         return custrepos.findByCustnameContainingIgnoringCase(custname);
     }
 
     @Override
-    public Customer findCustomersByCode(long custcode) throws
+    public List<Customer> findCustomerByCode(long custcode) throws
                                                EntityNotFoundException
     {
         return custrepos.findByCustcode(custcode)

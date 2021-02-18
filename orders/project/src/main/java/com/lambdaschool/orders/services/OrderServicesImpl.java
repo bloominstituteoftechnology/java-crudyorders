@@ -51,6 +51,14 @@ public class OrderServicesImpl implements OrderServices{
       newOrder.setOrdnum(receivedOrder.getOrdnum());
     }
 
+    newOrder.getPayments().clear();
+    for (Payment p : receivedOrder.getPayments()) {
+      Payment newPayment = paymentRepository.findById(p.getPaymentid())
+          .orElseThrow(() -> new EntityNotFoundException("Payment " + p.getPaymentid() + " not found!"));
+
+      newOrder.getPayments().add(newPayment);
+    }
+
     //set up newOrder object by pulling info from the request body
     newOrder.setOrdamount(receivedOrder.getOrdamount());
     newOrder.setOrderdescription(receivedOrder.getOrderdescription());

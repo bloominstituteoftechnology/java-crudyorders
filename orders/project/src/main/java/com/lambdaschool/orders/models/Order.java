@@ -1,11 +1,14 @@
 package com.lambdaschool.orders.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="orders")
+@JsonIgnoreProperties({"hasvalueforadvanceamount", "hasvalueforordamount"})
 public class Order {
   //ORDERS (ordnum, ordamount, advanceamount, custcode, orderdescription)
 
@@ -14,11 +17,17 @@ public class Order {
   private long ordnum;
 
   private double ordamount;
+  @Transient
+  public boolean hasvalueforordamount = false;
 
   private double advanceamount;
+  @Transient
+  public boolean hasvalueforadvanceamount = false;
 
   @ManyToOne
   @JoinColumn(name = "custcode", nullable = false)
+  @JsonIgnoreProperties(value = "orders",
+      allowSetters = true)
   private Customer customer;
 
   private String orderdescription;
@@ -49,6 +58,7 @@ public class Order {
   }
 
   public double getOrdamount() {
+    hasvalueforordamount = true;
     return ordamount;
   }
 
@@ -61,6 +71,7 @@ public class Order {
   }
 
   public void setAdvanceamount(double advanceamount) {
+    hasvalueforadvanceamount = true;
     this.advanceamount = advanceamount;
   }
 

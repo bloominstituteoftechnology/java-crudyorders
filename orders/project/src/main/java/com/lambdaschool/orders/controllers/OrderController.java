@@ -4,13 +4,14 @@ import com.lambdaschool.orders.models.Customer;
 import com.lambdaschool.orders.models.Order;
 import com.lambdaschool.orders.services.OrderServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,4 +37,35 @@ public class OrderController {
     return new ResponseEntity<>(orders, HttpStatus.OK);
   }
 
+  //http://localhost:2019/orders/order/{id}
+  @DeleteMapping(value = "/order/{id}")
+  public ResponseEntity<?> deleteOrderById(@PathVariable long id) {
+    orderServices.delete(id);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  //http://localhost:2019/orders/order
+  @PostMapping(value = "/order", consumes = "application/json", produces = "application/json")
+  public ResponseEntity<?> addNewOrder(@Valid @RequestBody Order order) {
+    order.setOrdnum(0);
+    order = orderServices.save(order);
+
+    HttpHeaders responseHeaders = new HttpHeaders();
+    URI newOrderURI = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{orderid}")
+        .buildAndExpand(order.getOrdnum())
+        .toUri();
+    responseHeaders.setLocation(newOrderURI);
+
+    return new ResponseEntity<>(order, responseHeaders, HttpStatus.CREATED);
+  }
+
+  //http://localhost:2019/orders/order/{id}
+  @PutMapping(value = "/order/{id}", produces = "application/json", consumes = "application/json")
+  public ResponseEntity<?> replaceOrder(@Valid @RequestBody Order order, @PathVariable long id) {
+    order.setOrdnum(id);
+    order = orderServices.save(order);
+
+    return new ResponseEntity<>(order, HttpStatus.OK);
+  }
 }

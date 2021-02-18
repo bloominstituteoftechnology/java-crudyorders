@@ -20,12 +20,6 @@ public class AgentServicesImpl implements AgentServices {
     return agentRepository.save(agent);
   }
 
-//  @Override
-//  public Customer findCustomerById(long custcode) {
-//    return customerRepository.findById(custcode)
-//        .orElseThrow(() -> new EntityNotFoundException("Customer " + custcode + " not found."));
-//  }
-
   @Override
   public Agent findAgentById(long agentid) {
     Agent agent = agentRepository.findById(agentid)

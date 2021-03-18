@@ -44,4 +44,16 @@ public class CustomerServicesImpl implements CustomerServices
         return custrepos.findByCustnameContainingIgnoringCase(subname);
     }
 
+    @Transactional
+    @Override
+    public void delete(long custid) {
+        if (custrepos.findById(custid).isPresent())
+        {
+            custrepos.deleteById(custid);
+        } else
+        {
+            throw new EntityNotFoundException("Customer " + custid + " Not Found");
+        }
+    }
+
 }

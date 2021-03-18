@@ -6,10 +6,7 @@ import com.lambda.javaorders.services.CustomerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,6 +41,24 @@ public class CustomerControllers
     {
         List<Customer> rtnList = customerServices.findByNameLike(subname);
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
+    }
+
+    // POST /customers/customer - Adds a new customer including any new orders
+
+
+    // PUT /customers/customer/{custcode} - completely replaces the customer record including associated orders with the provided data
+
+
+    // PATCH /customers/customer/{custcode} - updates customers with the new data. Only the new data is to be sent from the frontend client.
+
+
+    // DELETE - Deletes the given customer including any associated orders
+    // http://localhost:2019/customers/customer/7
+    @DeleteMapping(value = "/customer/{custid}")
+    public ResponseEntity<?> deleteCustomerById(@PathVariable long custid)
+    {
+        customerServices.delete(custid);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

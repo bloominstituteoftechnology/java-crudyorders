@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
+@JsonIgnoreProperties(value = {"hasvalueforopeningamt", "hasvalueforreceiveamt", "hasvalueforpaymentamt", "hasvalueforoutstandingamt"})
 public class Customer
 {
     @Id
@@ -20,9 +23,17 @@ public class Customer
     private String workingarea;
     private String custcountry;
     private String grade;
+    @Transient
+    public boolean hasvalueforopeningamt = false;
     private double openingamt;
+    @Transient
+    public boolean hasvalueforreceiveamt = false;
     private double receiveamt;
+    @Transient
+    public boolean hasvalueforpaymentamt = false;
     private double paymentamt;
+    @Transient
+    public boolean hasvalueforoutstandingamt = false;
     private double outstandingamt;
     private String phone;
 
@@ -36,6 +47,14 @@ public class Customer
     orphanRemoval = true)
     @JsonIgnoreProperties(value = "customer", allowSetters = true)
     private List<Order> orders = new ArrayList<>();
+
+    @ManyToMany()
+    @JoinTable(name = "customerpayments",
+        joinColumns = @JoinColumn(name = "custcode"),
+        inverseJoinColumns = @JoinColumn(name = "paymentid"))
+    @JsonIgnoreProperties(value = "customers",
+        allowSetters = true)
+    Set<Payment> payments = new HashSet<>();
 
     public Customer()
     {
@@ -134,6 +153,7 @@ public class Customer
 
     public void setOpeningamt(double openingamt)
     {
+        hasvalueforopeningamt = true;
         this.openingamt = openingamt;
     }
 
@@ -144,6 +164,7 @@ public class Customer
 
     public void setReceiveamt(double receiveamt)
     {
+        hasvalueforreceiveamt = true;
         this.receiveamt = receiveamt;
     }
 
@@ -154,6 +175,7 @@ public class Customer
 
     public void setPaymentamt(double paymentamt)
     {
+        hasvalueforpaymentamt = true;
         this.paymentamt = paymentamt;
     }
 
@@ -164,6 +186,7 @@ public class Customer
 
     public void setOutstandingamt(double outstandingamt)
     {
+        hasvalueforoutstandingamt = true;
         this.outstandingamt = outstandingamt;
     }
 
@@ -186,4 +209,25 @@ public class Customer
     {
         this.agent = agent;
     }
+
+    public List<Order> getOrders()
+    {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders)
+    {
+        this.orders = orders;
+    }
+
+    public Set<Payment> getPayments()
+    {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments)
+    {
+        this.payments = payments;
+    }
+
 }

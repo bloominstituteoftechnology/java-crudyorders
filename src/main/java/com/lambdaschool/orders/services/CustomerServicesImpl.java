@@ -1,7 +1,10 @@
 package com.lambdaschool.orders.services;
 
 import com.lambdaschool.orders.models.Customer;
+import com.lambdaschool.orders.models.Order;
+import com.lambdaschool.orders.models.Payment;
 import com.lambdaschool.orders.repositories.CustomerRepository;
+import com.lambdaschool.orders.repositories.PaymentRepository;
 import com.lambdaschool.orders.views.AdvanceAmounts;
 import com.lambdaschool.orders.views.OrderCounts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class CustomerServicesImpl implements CustomerServices
 {
     @Autowired
     private CustomerRepository customerrepos;
+
+    @Autowired
+    private PaymentRepository paymentrepos;
 
     @Transactional
     @Override
@@ -42,6 +48,24 @@ public class CustomerServicesImpl implements CustomerServices
         newCust.setPaymentamt(customer.getPaymentamt());
         newCust.setOutstandingamt(customer.getOutstandingamt());
         newCust.setPhone(customer.getPhone());
+
+        newCust.getOrders().clear();
+        for (Order o: customer.getOrders())
+        {
+            Order newOrder = new Order();
+            newOrder.setOrderdescription(o.getOrderdescription());
+            newOrder.setOrdamount(o.getOrdamount());
+            newOrder.setAdvanceamount(o.getAdvanceamount());
+        }
+
+        newCust.getPayments().clear();
+        for (Payment p : customer.getPayments())
+        {
+            Payment newPayment = paymentrepos.findById(p.getPaymentid())
+                .orElseThrow(()-> new EntityNotFoundException("Payment " + p.getPaymentid() + " NotFound"));
+
+            newCust.getPayments().add(newPayment);
+        }
 
         return customerrepos.save(customer);
     }
@@ -96,11 +120,97 @@ public class CustomerServicesImpl implements CustomerServices
         }
     }
 
+    @Transactional
     @Override
-    public Customer update(
-        Customer customer,
-        long id)
+    public Customer update(Customer customer, long id)
     {
-        return null;
+        Customer currentCustomer = findCustomerByCustcode(id);
+
+        if (customer.getCustcode() != 0)
+        {
+            findCustomerByCustcode(customer.getCustcode());
+            currentCustomer.setCustcode(customer.getCustcode());
+        }
+
+        if (customer.getCustname()!= null)
+        {
+            currentCustomer.setCustname(customer.getCustname());
+        }
+
+        if (customer.getCustcity() != null)
+        {
+            currentCustomer.setCustcity(customer.getCustcity());
+        }
+
+        if (customer.getWorkingarea() != null)
+        {
+            currentCustomer.setWorkingarea(customer.getWorkingarea());
+        }
+
+        if (customer.getCustcountry() != null)
+        {
+            currentCustomer.setCustcountry(customer.getCustcountry());
+        }
+
+        if (customer.getGrade()!= null)
+        {
+            currentCustomer.setGrade(customer.getGrade());
+        }
+
+        if (customer.hasvalueforopeningamt)
+        {
+            currentCustomer.setOpeningamt(customer.getOpeningamt());
+        }
+
+        if (customer.hasvalueforreceiveamt)
+        {
+            currentCustomer.setReceiveamt(customer.getReceiveamt());
+        }
+
+        if (customer.hasvalueforpaymentamt)
+        {
+            currentCustomer.setPaymentamt(customer.getPaymentamt());
+        }
+
+        if (customer.hasvalueforoutstandingamt)
+        {
+            currentCustomer.setOutstandingamt(customer.getOutstandingamt());
+        }
+
+        currentCustomer.setCustname(customer.getCustname());
+        currentCustomer.setCustcity(customer.getCustcity());
+        currentCustomer.setWorkingarea(customer.getWorkingarea());
+        currentCustomer.setCustcountry(customer.getCustcountry());
+        currentCustomer.setGrade(customer.getGrade());
+        currentCustomer.setOpeningamt(customer.getOpeningamt());
+        currentCustomer.setReceiveamt(customer.getReceiveamt());
+        currentCustomer.setPaymentamt(customer.getPaymentamt());
+        currentCustomer.setOutstandingamt(customer.getOutstandingamt());
+        currentCustomer.setPhone(customer.getPhone());
+
+        if (customer.getOrders().size() > 0)
+        {
+            currentCustomer.getOrders().clear();
+            for (Order o : customer.getOrders())
+            {
+                Order newOrder = new Order();
+                newOrder.setOrderdescription(o.getOrderdescription());
+                newOrder.setOrdamount(o.getOrdamount());
+                newOrder.setAdvanceamount(o.getAdvanceamount());
+            }
+        }
+
+        if (customer.getPayments().size() >0)
+        {
+            currentCustomer.getPayments().clear();
+            for (Payment p : customer.getPayments())
+            {
+                Payment newPayment = paymentrepos.findById(p.getPaymentid())
+                    .orElseThrow(()-> new EntityNotFoundException("Payment " + p.getPaymentid() + " NotFound"));
+
+                currentCustomer.getPayments().add(newPayment);
+            }
+        }
+        return customerrepos.save(currentCustomer);
     }
 }

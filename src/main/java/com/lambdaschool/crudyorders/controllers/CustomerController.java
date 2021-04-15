@@ -36,6 +36,24 @@ public class CustomerController {
         return new ResponseEntity<>(custList,
                 HttpStatus.OK);
     }
+    @DeleteMapping(value="/customers/customer/{custcode}")
+    public ResponseEntity<?> deleteById(@PathVariable long custcode){
+        customerServices.delete(custcode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PutMapping(value ="/customers/customer/{custcode}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> replaceCustomerById(@PathVariable long custcode, @RequestBody @Valid Customer customer){
+        customer.setCustcode(custcode);
+        Customer newCustomer = customerServices.save(customer);
+        return new ResponseEntity<>(newCustomer,HttpStatus.OK);
+    }
+    @PatchMapping(value = "/customers/customer/{custcode}}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateRestaurantById(@PathVariable long custcode, @RequestBody Customer customer) {
+        Customer updatedCustomer = customerServices.update(custcode, customer);
+        return new ResponseEntity<>(updatedCustomer,HttpStatus.OK);
+
+
+    }
 
     @PostMapping(value = "/customers/customer", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer newCustomer, @PathVariable long custid) {
@@ -48,7 +66,9 @@ public class CustomerController {
                 .buildAndExpand(newCustomer.getCustcode())
                 .toUri();
         responseHeaders.setLocation(newCustomerURI);
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED)
+        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
+
+
 }
 

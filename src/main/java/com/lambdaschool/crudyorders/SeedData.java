@@ -1,5 +1,20 @@
 package com.lambdaschool.crudyorders;
 
+import com.lambdaschool.crudyorders.models.Agent;
+import com.lambdaschool.crudyorders.models.Customer;
+import com.lambdaschool.crudyorders.models.Order;
+import com.lambdaschool.crudyorders.models.Payment;
+import com.lambdaschool.crudyorders.repositories.PaymentRepository;
+import com.lambdaschool.crudyorders.services.AgentServices;
+import com.lambdaschool.crudyorders.services.CustomerServices;
+import com.lambdaschool.crudyorders.services.OrderServices;
+import com.lambdaschool.crudyorders.services.PaymentServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
+
 @Transactional
 @Component
 public class SeedData
@@ -8,30 +23,31 @@ public class SeedData
      * Connects the customer table to this SeedData method
      */
     @Autowired
-    private CustomersRepository custrepos;
+    private CustomerServices customerServices;
 
+    @Autowired
+    OrderServices orderServices;
     /**
      * Connects the agents table to this SeedData method
      */
     @Autowired
-    private AgentsRepository agentrepos;
+    private AgentServices agentServices;
 
+    @Autowired
+    private PaymentServices paymentServices;
     /**
      * Connects the orders table to this SeedData method
      */
-    @Autowired
-    private OrdersRepository ordersrepos;
+
 
     /**
      * Connects the payment table to this SeedData method
      */
-    @Autowired
-    private PaymentRepository paymentrepos;
+
 
     /**
      * A Random generator is needed to randomly generate faker data.
      */
-    private Random random = new Random();
 
     /**
      * Generates test, seed data for our application
@@ -46,15 +62,17 @@ public class SeedData
     @Override
     public void run(String[] args) throws
             Exception {
+
+
         Payment pay1 = new Payment("Cash");
         Payment pay2 = new Payment("Gift Card");
         Payment pay3 = new Payment("Credit Card");
         Payment pay4 = new Payment("Mobile Pay");
 
-        pay1 = paymentrepos.save(pay1);
-        pay2 = paymentrepos.save(pay2);
-        pay3 = paymentrepos.save(pay3);
-        pay4 = paymentrepos.save(pay4);
+        pay1 = paymentServices.save(pay1);
+        pay2 = paymentServices.save(pay2);
+        pay3 = paymentServices.save(pay3);
+        pay4 = paymentServices.save(pay4);
 
         Agent a01 = new Agent("Ramasundar",
                 "Bangalore",
@@ -116,7 +134,18 @@ public class SeedData
                 0.11,
                 "008-22536178",
                 "");
-
+        a01 = agentServices.save(a01);
+        a02 = agentServices.save(a02);
+        a03 = agentServices.save(a03);
+        a04 = agentServices.save(a04);
+        a05 = agentServices.save(a05);
+        a06 = agentServices.save(a06);
+        a07 = agentServices.save(a07);
+        a08 = agentServices.save(a08);
+        a09 = agentServices.save(a09);
+        a10 = agentServices.save(a10);
+        a11 = agentServices.save(a11);
+        a12 = agentServices.save(a12);
         Customer c01 = new Customer("Holmes",
                 "London",
                 "London",
@@ -392,25 +421,51 @@ public class SeedData
                 11000.00,
                 "PPHGRTS",
                 a10);
+        c01 = customerServices.save(c01);
+        c02 = customerServices.save(c02);
+        c03 = customerServices.save(c03);
+        c04 = customerServices.save(c04);
+        c05 = customerServices.save(c05);
+        c06 = customerServices.save(c06);
+        c07 = customerServices.save(c07);
+        c08 = customerServices.save(c08);
+        c09 = customerServices.save(c09);
+        c10 = customerServices.save(c10);
+        c11 = customerServices.save(c11);
+        c12 = customerServices.save(c12);
+        c13 = customerServices.save(c13);
+        c14 = customerServices.save(c14);
+        c15 = customerServices.save(c15);
+        c16 = customerServices.save(c16);
+        c17 = customerServices.save(c17);
+        c18 = customerServices.save(c18);
+        c19 = customerServices.save(c19);
+        c20 = customerServices.save(c20);
+        c21 = customerServices.save(c21);
+        c22 = customerServices.save(c22);
+        c23 = customerServices.save(c23);
+        c24 = customerServices.save(c24);
+        c25 = customerServices.save(c25);
+
 
         Order o01 = new Order(1000.00,
                 600.00,
-                c13,
-                "SOD");
+                "SOD",
+                c13);
         o01.getPayments()
                 .add(pay1);
 
         Order o02 = new Order(3000.00,
                 500.00,
-                c19,
-                "SOD");
+                "SOD",
+                c19);
         o02.getPayments()
                 .add(pay2);
 
         Order o03 = new Order(4500.00,
                 900.00,
-                c07,
-                "SOD");
+                "SOD",
+                c07);
         o03.getPayments()
                 .add(pay3);
         o03.getPayments()
@@ -418,193 +473,85 @@ public class SeedData
 
         Order o04 = new Order(2000.00,
                 0.00,
-                c16,
-                "SOD");
+                "SOD",
+                c16);
         o04.getPayments()
                 .add(pay4);
 
         Order o05 = new Order(4000.00,
                 600.00,
-                c22,
-                "SOD");
+                "SOD",
+                c22);
         o05.getPayments()
                 .add(pay2);
 
         Order o06 = new Order(2000.00,
                 0.00,
-                c12,
-                "SOD");
+                "SOD",
+                c12);
         o06.getPayments()
                 .add(pay3);
 
         Order o07 = new Order(3500.00,
                 2000.00,
-                c02,
-                "SOD");
+                "SOD",
+                c02);
         o07.getPayments()
                 .add(pay4);
 
         Order o08 = new Order(2500.00,
                 400.00,
-                c03,
-                "SOD");
+                "SOD",
+                c03);
         o08.getPayments()
                 .add(pay1);
 
         Order o09 = new Order(500.00,
                 0.00,
-                c23,
-                "SOD");
+                "SOD",
+                c23);
         o09.getPayments()
                 .add(pay3);
 
         Order o10 = new Order(4000.00,
                 700.00,
-                c07,
-                "SOD");
+                "SOD",
+                c07);
         o10.getPayments()
                 .add(pay4);
 
         Order o11 = new Order(1500.00,
                 600.00,
-                c08,
-                "SOD");
+                "SOD",
+                c08);
         o11.getPayments()
                 .add(pay2);
 
         Order o12 = new Order(2500.00,
                 0.00,
-                c25,
-                "SOD");
+                "SOD",
+                c25);
         o12.getPayments()
                 .add(pay1);
 
-        agentrepos.save(a01);
-        agentrepos.save(a02);
-        agentrepos.save(a03);
-        agentrepos.save(a04);
-        agentrepos.save(a05);
-        agentrepos.save(a06);
-        agentrepos.save(a07);
-        agentrepos.save(a08);
-        agentrepos.save(a09);
-        agentrepos.save(a10);
-        agentrepos.save(a11);
-        agentrepos.save(a12);
 
-        custrepos.save(c01);
-        custrepos.save(c02);
-        custrepos.save(c03);
-        custrepos.save(c04);
-        custrepos.save(c05);
-        custrepos.save(c06);
-        custrepos.save(c07);
-        custrepos.save(c08);
-        custrepos.save(c09);
-        custrepos.save(c10);
-        custrepos.save(c11);
-        custrepos.save(c12);
-        custrepos.save(c13);
-        custrepos.save(c14);
-        custrepos.save(c15);
-        custrepos.save(c16);
-        custrepos.save(c17);
-        custrepos.save(c18);
-        custrepos.save(c19);
-        custrepos.save(c20);
-        custrepos.save(c21);
-        custrepos.save(c22);
-        custrepos.save(c23);
-        custrepos.save(c24);
-        custrepos.save(c25);
 
-        ordersrepos.save(o01);
-        ordersrepos.save(o02);
-        ordersrepos.save(o03);
-        ordersrepos.save(o04);
-        ordersrepos.save(o05);
-        ordersrepos.save(o06);
-        ordersrepos.save(o07);
-        ordersrepos.save(o08);
-        ordersrepos.save(o09);
-        ordersrepos.save(o10);
-        ordersrepos.save(o11);
-        ordersrepos.save(o12);
+
+        orderServices.save(o01);
+        orderServices.save(o02);
+        orderServices.save(o03);
+        orderServices.save(o04);
+        orderServices.save(o05);
+        orderServices.save(o06);
+        orderServices.save(o07);
+        orderServices.save(o08);
+        orderServices.save(o09);
+        orderServices.save(o10);
+        orderServices.save(o11);
+        orderServices.save(o12);
 
         //Begins the faker data
 
-        Faker dataFaker = new Faker(new Locale("en-US"));
-        Set<String> customerNames = new HashSet<>();
-        for (int i = 0; i < 100; i++) {
-            customerNames.add(dataFaker.name()
-                    .fullName());
-        }
-
-        for (String theName : customerNames) {
-            String custcity = dataFaker.address()
-                    .city();
-            String tempWorkingarea = dataFaker.address()
-                    .cityName();
-            String tempCustcountry = dataFaker.address()
-                    .country();
-            String tempGrade = dataFaker.country()
-                    .countryCode2();
-            double tempOpeningamt = dataFaker.number()
-                    .randomDouble(2,
-                            0,
-                            10000);
-            double tempReceiveamt = dataFaker.number()
-                    .randomDouble(2,
-                            0,
-                            10000);
-            double tempPaymentamt = dataFaker.number()
-                    .randomDouble(2,
-                            0,
-                            10000);
-            double tempOutstandingamt = dataFaker.number()
-                    .randomDouble(2,
-                            0,
-                            10000);
-            String tempPhone = dataFaker.phoneNumber()
-                    .phoneNumber();
-
-            Customer fakeCustomer = new Customer(theName,
-                    custcity,
-                    tempWorkingarea,
-                    tempCustcountry,
-                    tempGrade,
-                    tempOpeningamt,
-                    tempReceiveamt,
-                    tempPaymentamt,
-                    tempOutstandingamt,
-                    tempPhone,
-                    a10);
-
-            int randomNumber = random.nextInt(10); // random number 0 through 9
-            for (int i = 0; i < randomNumber; i++) {
-                double tempGetOrdamount = dataFaker.number()
-                        .randomDouble(2,
-                                0,
-                                10000);
-                double tempGetAdvanceamount = dataFaker.number()
-                        .randomDouble(2,
-                                0,
-                                10000);
-                String tempGetOrderdescription = dataFaker.lorem()
-                        .characters();
-
-                Order newOrder = new Order(tempGetOrdamount,
-                        tempGetAdvanceamount,
-                        fakeCustomer,
-                        tempGetOrderdescription);
-
-                newOrder.getPayments().add(pay1);
-                fakeCustomer.getOrders()
-                        .add(newOrder);
-            }
-
-            // this actually saves the faker data.
-            custrepos.save(fakeCustomer);
-        }
+//
     }
 }

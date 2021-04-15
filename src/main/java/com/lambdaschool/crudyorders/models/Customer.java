@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name="customers")
-@JsonIgnoreProperties(value ="hasvalueforopeningamt",allowSetters = true)
+@JsonIgnoreProperties(value ={"hasvalueforopeningamt","hasvalueforreceiveamt","hasvalueforpaymentamt","hasvalueforoutstandingamt"})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,12 +25,12 @@ public class Customer {
     private String phone;
     @Transient
     public boolean hasvalueforopeningamt = false;
-            @Transient
-            public boolean hasvalueforreceiveamt = false;
-            @Transient
-            public boolean hasvalueforpaymentamt = false;
-            @Transient
-            public boolean hasvalueforoutstandingamt= false;
+    @Transient
+    public boolean hasvalueforeceiveamt = false;
+    @Transient
+    public boolean hasvalueforpaymentamt = false;
+    @Transient
+    public boolean hasvalueforoutstandingamt = false;
 
     @ManyToOne
     @JoinColumn(name = "agentcode",nullable = false)
@@ -116,7 +116,7 @@ public class Customer {
     }
 
     public void setReceiveamt(double recieveamt) {
-        hasvalueforreceiveamt = true;
+        hasvalueforeceiveamt= true;
         this.receiveamt = recieveamt;
     }
 
@@ -124,7 +124,7 @@ public class Customer {
     }
 
     public void setOutstandingamt(double outstandingamt) {
-        hasvalueforoutstandingamt = true;
+        hasvalueforoutstandingamt= true;
         this.outstandingamt = outstandingamt;
     }
 
@@ -165,7 +165,7 @@ public class Customer {
     }
 
     public void setPaymentamt(double paymentamt) {
-        hasvalueforpaymentamt = true;
+        hasvalueforpaymentamt= true;
         this.paymentamt = paymentamt;
     }
 

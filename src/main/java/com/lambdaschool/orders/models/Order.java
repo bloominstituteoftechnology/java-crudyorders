@@ -95,4 +95,14 @@ public class Order
     {
         this.orderdescription = orderdescription;
     }
+
+    public Set<Payment> getPayments()
+    {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments)
+    {
+        this.payments = payments;
+    }
 }

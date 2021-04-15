@@ -25,6 +25,9 @@ public class CustomerServicesImpl implements CustomerServices
     @Autowired
     private PaymentRepository paymentrepos;
 
+    @Autowired
+    private AgentServices agentServices;
+
     @Transactional
     @Override
     public Customer save(Customer customer)
@@ -32,8 +35,7 @@ public class CustomerServicesImpl implements CustomerServices
         Customer newCust = new Customer();
         if(customer.getCustcode() != 0)
         {
-            customerrepos.findById(customer.getCustcode())
-                .orElseThrow(()-> new EntityNotFoundException("Customer " + customer.getCustcode() + " Not Found"));
+            findCustomerByCustcode(customer.getCustcode());
 
             newCust.setCustcode(customer.getCustcode());
         }
@@ -48,6 +50,7 @@ public class CustomerServicesImpl implements CustomerServices
         newCust.setPaymentamt(customer.getPaymentamt());
         newCust.setOutstandingamt(customer.getOutstandingamt());
         newCust.setPhone(customer.getPhone());
+        newCust.setAgent(agentServices.findAgentByAgentcode(customer.getAgent().getAgentcode()));
 
         newCust.getOrders().clear();
         for (Order o: customer.getOrders())
@@ -56,6 +59,8 @@ public class CustomerServicesImpl implements CustomerServices
             newOrder.setOrderdescription(o.getOrderdescription());
             newOrder.setOrdamount(o.getOrdamount());
             newOrder.setAdvanceamount(o.getAdvanceamount());
+            newOrder.setCustomer(newCust);
+            newCust.getOrders().add(newOrder);
         }
 
         newCust.getPayments().clear();
@@ -67,7 +72,7 @@ public class CustomerServicesImpl implements CustomerServices
             newCust.getPayments().add(newPayment);
         }
 
-        return customerrepos.save(customer);
+        return customerrepos.save(newCust);
     }
 
     @Override

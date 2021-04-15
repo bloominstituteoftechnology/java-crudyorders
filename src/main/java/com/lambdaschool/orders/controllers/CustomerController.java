@@ -61,7 +61,7 @@ public class CustomerController
     }
 
 //    POST http://localhost:2019/customers/customer
-    @PostMapping(value = "/customer", consumes = "application/json")
+    @PostMapping(value = "/customer", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> addNewCustomer(@Valid
                                             @RequestBody
                                                 Customer newCustomer)

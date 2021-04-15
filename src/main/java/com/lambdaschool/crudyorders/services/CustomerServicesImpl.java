@@ -1,12 +1,14 @@
 package com.lambdaschool.crudyorders.services;
 
 import com.lambdaschool.crudyorders.models.Customer;
+import com.lambdaschool.crudyorders.models.Order;
 import com.lambdaschool.crudyorders.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +44,113 @@ public class CustomerServicesImpl implements CustomerServices{
                 .forEachRemaining(list::add);
         return list;
     }
+    @Transactional
+    @Override
+    public Customer save(Customer customer) {
+
+
+        Customer newCustomer = new Customer();
+
+        if (customer.getCustcode() != 0){
+            customerrepos.findById(customer.getCustcode())
+                    .orElseThrow(()-> new EntityNotFoundException("Customer" + customer.getCustcode() + "Not Found"));
+            newCustomer.setCustcode(customer.getCustcode());
+        }
+
+
+        newCustomer.setCustname(customer.getCustname());
+        newCustomer.setCustcity(customer.getCustcity());
+        newCustomer.setWorkingarea(customer.getWorkingarea());
+        newCustomer.setCustcountry(customer.getCustcountry());
+        newCustomer.setGrade(customer.getGrade());
+        newCustomer.setOpeningamt(customer.getOpeningamt();
+        newCustomer.setReceiveamt(customer.getReceiveamt());
+        newCustomer.setPaymentamt(customer.getPaymentamt());
+        newCustomer.setOutstandingamt(customer.getOutstandingamt());
+        newCustomer.setPhone(customer.getPhone());
+
+        newCustomer.getOrders().clear();
+        for (Order o : customer.getOrders()){
+            Order newOrder = new Order();
+            newOrder.setOrdnum(o.getOrdnum())
+            newOrder.setOrdamount(o.getOrdamount());
+            newOrder.setAdvanceamount(o.getAdvanceamount());
+            newOrder.setOrderdescription(o.getOrderdescription());
+
+            newOrder.setCustomer(newCustomer);
+            newCustomer.getOrders().add(newOrder);
+        }
+        return customerrepos.save(newCustomer);
+    }
+
+    @Override
+    public Customer update(long id, Customer customer) {
+        Customer updateCustomer = customerrepos.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant " + id + " not found!"));
+
+        if (customer.getCustname()!= null ) {
+            updateCustomer.setCustname(customer.getCustname());
+        }
+        if (customer.getCustcity() != null ) {
+            updateCustomer.setCustcity(customer.getCustcity());
+        }
+        if (customer.getWorkingarea() != null ) {
+            updateCustomer.setWorkingarea(customer.getWorkingarea());
+        }
+        if (customer.getCustcountry() != null ) {
+            updateCustomer.setCustcountry(customer.getCustcountry());
+        }
+        if (customer.getGrade() != null ) {
+            updateCustomer.setGrade(customer.getGrade());
+        }
+        if (customer.hasvalueforopeningamt){
+            updateCustomer.setOpeningamt(customer.getOpeningamt());
+        }
+        if (customer.hasvalueforpaymentamt){
+            updateCustomer.setPaymentamt(customer.getPaymentamt());
+        }
+        if (customer.hasvalueforreceiveamt){
+            updateCustomer.setReceiveamt(customer.getReceiveamt());
+        }
+        if (customer.hasvalueforoutstandingamt){
+            updateCustomer.setOutstandingamt(customer.getOutstandingamt());
+        }
+
+        if (customer.getMenus().size() > 0) {
+            //OneToMany -> new resources that arent in the database yet
+            updateCustomer.getMenus().clear();
+            for (Menu m : customer.getMenus()) {
+                Menu newMenu = new Menu();
+                newMenu.setDish(m.getDish());
+                newMenu.setPrice(m.getPrice());
+
+                newMenu.setRestaurant(updateCustomer);
+
+                updateCustomer.getMenus().add(newMenu);
+            }
+        }
+
+        if (customer.getPayments().size() > 0) {
+            //ManyToMany -> existing database entities
+            updateCustomer.getPayments().clear();
+            for (Payment p : customer.getPayments()) {
+                Payment newPayment = paymentRepository.findById(p.getPaymentid())
+                        .orElseThrow(() -> new EntityNotFoundException("Payment " + p.getPaymentid() + " not found!"));
+
+                updateCustomer.getPayments().add(newPayment);
+            }
+        }
+
+        return restrepos.save(updateCustomer);
+    }
+
+
+    @Override
+    public void delete(long id) {
+        customerrepos.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer " + id + " not found!"));
+        customerrepos.deleteById(id);
+    }
+
 }
 

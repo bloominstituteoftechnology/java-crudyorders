@@ -17,6 +17,7 @@ public class Order {
     private double ordamount;
     private double advanceamount;
     private String orderdescription;
+
     @ManyToMany()
     @JoinTable(name = "orderspayments",
             joinColumns = @JoinColumn(name="ordnum"),

@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@JsonIgnoreProperties(value = {"hasordamount", "hasadvanceamount"})
 public class Order
 {
     @Id
@@ -18,6 +19,12 @@ public class Order
     private double advanceamount;
     private String orderdescription;
 
+    @Transient
+    public boolean hasordamount = false;
+
+    @Transient
+    public boolean hasadvanceamount = false;
+
     @ManyToOne
     @JoinColumn(name = "custcode", nullable = false)
     @JsonIgnoreProperties(value = "orders", allowSetters = true)
@@ -27,7 +34,7 @@ public class Order
     @JoinTable(name = "orderspayments",
         joinColumns = @JoinColumn(name = "ordnum"),
         inverseJoinColumns = @JoinColumn(name = "paymentid"))
-    @JsonIgnoreProperties(value = "order", allowSetters = true)
+    @JsonIgnoreProperties(value = "orders", allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
 
@@ -66,6 +73,7 @@ public class Order
     public void setOrdamount(double ordamount)
     {
         this.ordamount = ordamount;
+        hasordamount = true;
     }
 
     public double getAdvanceamount()
@@ -76,6 +84,7 @@ public class Order
     public void setAdvanceamount(double advanceamount)
     {
         this.advanceamount = advanceamount;
+        hasadvanceamount = true;
     }
 
     public String getOrderdescription()

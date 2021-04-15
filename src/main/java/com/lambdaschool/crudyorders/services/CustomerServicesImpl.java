@@ -92,7 +92,7 @@ public class CustomerServicesImpl implements CustomerServices{
     @Override
     public Customer update(long id, Customer customer) {
         Customer updateCustomer = customerrepos.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant " + id + " not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Customer " + id + " not found!"));
 
         if (customer.getCustname()!= null ) {
             updateCustomer.setCustname(customer.getCustname());

@@ -24,6 +24,7 @@ public class OrderServicesImpl implements OrderServices {
 
     @Autowired
     private CustomerServices customerServices;
+
     @Override
     public List<Order> findAllOrders() {
 
@@ -41,6 +42,7 @@ public class OrderServicesImpl implements OrderServices {
 
     }
 
+    @Transactional
     @Override
     public Order save(Order order) {
         Order newOrder = new Order();
@@ -59,7 +61,6 @@ public class OrderServicesImpl implements OrderServices {
         newOrder.setAdvanceamount(order.getAdvanceamount());
 
 
-
         //ManyToMany -> existing database entities
         newOrder.getPayments().clear();
         for (Payment p : order.getPayments()) {
@@ -73,7 +74,7 @@ public class OrderServicesImpl implements OrderServices {
     }
 
 
-
+    @Transactional
     @Override
     public void delete(long id) {
         orderrepos.findById(id)
@@ -82,8 +83,26 @@ public class OrderServicesImpl implements OrderServices {
 
     }
 
+    @Transactional
     @Override
     public Order update(long id, Order order) {
-        return null;
+        Order updateOrder = orderrepos.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order " + id + " not found!"));
+
+        if (order.getOrderdescription() != null) {
+            updateOrder.setOrderdescription(order.getOrderdescription());
+        }
+        if (order.hasvalueforordamout) {
+            updateOrder.setOrdamount(order.getOrdamount());
+        }
+        if (order.hasvalueforadvanceamount) {
+            updateOrder.setAdvanceamount(order.getAdvanceamount());
+        }
+
+
+        return orderrepos.save(updateOrder);
     }
+
 }
+
+

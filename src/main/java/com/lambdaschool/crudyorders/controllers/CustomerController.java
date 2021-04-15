@@ -47,8 +47,8 @@ public class CustomerController {
         Customer newCustomer = customerServices.save(customer);
         return new ResponseEntity<>(newCustomer,HttpStatus.OK);
     }
-    @PatchMapping(value = "/customers/customer/{custcode}}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateRestaurantById(@PathVariable long custcode, @RequestBody Customer customer) {
+    @PatchMapping(value = "/customers/customer/{custcode}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateCustomerById (@PathVariable long custcode, @RequestBody Customer customer) {
         Customer updatedCustomer = customerServices.update(custcode, customer);
         return new ResponseEntity<>(updatedCustomer,HttpStatus.OK);
 
@@ -56,7 +56,7 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/customers/customer", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer newCustomer, @PathVariable long custid) {
+    public ResponseEntity<?> updateCustomer(@RequestBody @Valid Customer newCustomer) {
         newCustomer.setCustcode(0);
         newCustomer = customerServices.save(newCustomer);
 

@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@JsonIgnoreProperties(value = {"hasvalueforordamout","hasvalueforadvanceamount"})
 public class Order {
 
     @Id
@@ -17,6 +18,12 @@ public class Order {
     private double ordamount;
     private double advanceamount;
     private String orderdescription;
+    @Transient
+    public boolean hasvalueforordamout = false;
+    @Transient
+    public boolean hasvalueforadvanceamount =false;
+
+
 
     @ManyToMany()
     @JoinTable(name = "orderspayments",
@@ -46,6 +53,7 @@ public class Order {
     }
 
     public void setOrdamount(double orderamt) {
+        hasvalueforordamout=true;
         this.ordamount = orderamt;
     }
 
@@ -54,6 +62,7 @@ public class Order {
     }
 
     public void setAdvanceamount(double advanceamt) {
+        hasvalueforadvanceamount =true;
         this.advanceamount = advanceamt;
     }
 

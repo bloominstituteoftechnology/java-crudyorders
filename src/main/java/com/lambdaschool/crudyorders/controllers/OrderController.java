@@ -21,7 +21,7 @@ public class OrderController {
         Order o = orderServices.findOrderById(orderid);
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
-    @PostMapping(value="/order",produces = "application/json",consumes = "application/jspon")
+    @PostMapping(value="/order",produces = "application/json",consumes = "application/json")
     public ResponseEntity<?> addNewOrder(@RequestBody @Valid Order order) {
         order.setOrdnum(0);
         Order newOrder = orderServices.save(order);

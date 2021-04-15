@@ -77,7 +77,7 @@ public class CustomerServicesImpl implements CustomerServices {
       custrepos.deleteById(id);
     }
     else {
-      throw new EntityNotFoundException("Customer " + id + " not found!");
+      throw new EntityNotFoundException("Customer id: " + id + " not found!");
     }
   }
 

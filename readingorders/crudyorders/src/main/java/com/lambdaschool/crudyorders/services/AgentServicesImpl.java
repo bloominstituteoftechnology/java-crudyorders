@@ -36,4 +36,15 @@ public class AgentServicesImpl implements AgentServices {
             EntityNotFoundException("Agent " + id + " not found!"));
   }
 
+  @Override
+  public void delete(long id) {
+    if (agentrepos.findById(id).isPresent()) {
+      agentrepos.deleteById(id);
+    }
+    else {
+      throw new EntityNotFoundException(
+          "Agent id: " + id + "not found!");
+    }
+  }
+
 }

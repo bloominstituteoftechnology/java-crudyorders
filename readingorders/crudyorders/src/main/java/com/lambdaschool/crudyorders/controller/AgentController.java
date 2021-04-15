@@ -22,4 +22,14 @@ public class AgentController {
     Agent rtnAgent = agentServices.findAgentById(agentid);
     return new ResponseEntity<>(rtnAgent, HttpStatus.OK);
   }
+
+//  DELETE http://localhost:2019/agents/unassigned/8
+//  DELETE http://localhost:2019/agents/unassigned/16
+  @DeleteMapping(value = "/unassigned/{agentid}")
+  public ResponseEntity<?> deleteAgentById(
+      @PathVariable long agentid){
+
+      agentServices.delete(agentid);
+      return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

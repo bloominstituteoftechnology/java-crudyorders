@@ -78,7 +78,7 @@ public class OrderServicesImpl implements OrderServices{
       orderrepos.deleteById(id);
     }
     else {
-      throw new EntityNotFoundException("Order " + id + " not found!");
+      throw new EntityNotFoundException("Order id: " + id + " not found!");
     }
   }
 }

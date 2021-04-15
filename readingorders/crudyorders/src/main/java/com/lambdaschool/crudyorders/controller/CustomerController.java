@@ -66,7 +66,7 @@ public class CustomerController {
    *
    * @param custid The primary key of the restaurant you wish to delete.
    * @return No body is returned. A status of OK is returned if the deletion is successful.
-   * @see CustomerServices#delete(long) RestaurantServices.delete(long)
+   * @see CustomerServices#delete(long) OrderServices.delete(long)
    */
   //  DELETE http://localhost:2019/customers/customer/54
   @DeleteMapping(value ="/customer/{custid}")

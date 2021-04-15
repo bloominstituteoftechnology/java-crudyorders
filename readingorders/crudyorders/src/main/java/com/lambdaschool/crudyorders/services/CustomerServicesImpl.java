@@ -171,7 +171,6 @@ public class CustomerServicesImpl implements CustomerServices {
     newCustomer.setAgent(agentServices.findAgentById(
         customer.getAgent().getAgentcode()));
 
-
     //OneToMany
     newCustomer.getOrders().clear();
     for(Order o : customer.getOrders()){

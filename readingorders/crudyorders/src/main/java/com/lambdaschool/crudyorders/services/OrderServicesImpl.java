@@ -74,6 +74,11 @@ public class OrderServicesImpl implements OrderServices{
 
   @Override
   public void delete(long id) {
-    orderrepos.deleteAll();
+    if (orderrepos.findById(id).isPresent()){
+      orderrepos.deleteById(id);
+    }
+    else {
+      throw new EntityNotFoundException("Order " + id + " not found!");
+    }
   }
 }

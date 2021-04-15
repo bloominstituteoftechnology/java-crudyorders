@@ -1,6 +1,7 @@
 package com.lambdaschool.crudyorders.controller;//package com.lambdaschool.modelorders.controller;
 //
 import com.lambdaschool.crudyorders.models.Order;
+import com.lambdaschool.crudyorders.services.CustomerServices;
 import com.lambdaschool.crudyorders.services.OrderServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -62,9 +63,18 @@ public class OrderController {
     return new ResponseEntity<>(updateOrder, HttpStatus.OK);
   }
 
+  /**
+   * Delete the Restaurant record associated with the given id. The associated menu items, and Restaurant Payments items are also deleted. Payments is unaffected.
+   * <br> Example: <a href="http://localhost:2019/restaurants/restaurant/4">http://localhost:2019/restaurants/restaurant/4</a>
+   *
+   * @param orderid The primary key of the restaurant you wish to delete.
+   * @return No body is returned. A status of OK is returned if the deletion is successful.
+   * @see OrderServices#delete(long) OrderServices.delete(long)
+   */
   //  DELETE http://localhost:2019/orders/order/58
-  @DeleteMapping(value = "/order{orderid}")
-  public ResponseEntity<?> deleteOrderById(@PathVariable long orderid){
+  @DeleteMapping(value = "/order/{orderid}")
+  public ResponseEntity<?> deleteOrderById(
+      @PathVariable long orderid){
     orderServices.delete(orderid);
     return new ResponseEntity<>(HttpStatus.OK);
   }

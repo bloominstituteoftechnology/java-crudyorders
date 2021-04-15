@@ -45,7 +45,7 @@ public class Customer {
   @ManyToOne
   @JoinColumn(name="agentcode",
   nullable = false)
-  @JsonIgnoreProperties(value = "customers", allowSetters = true)
+  @JsonIgnoreProperties(value = "customer", allowSetters = true)
   private Agent agent;
 
   @OneToMany(mappedBy = "customer",

@@ -11,8 +11,8 @@ A student that completes this project shows that they can:
 
 This is Part 3 of a 3 Part project.
 
-* Part 1 can be found at [java-orders](https://github.com/LambdaSchool/java-orders.git)
-* Part 2 can be found at [java-getorders](https://github.com/LambdaSchool/java-getorders.git)
+* Part 1 can be found at [java-orders](https://github.com/BloomInstituteOfTechnology/java-orders.git)
+* Part 2 can be found at [java-getorders](https://github.com/BloomInstituteOfTechnology/java-getorders.git)
 
 This is a basic database scheme with customers, orders, and sales agents. This Java Spring REST API application will provide endpoints for clients to manipulate various data sets contained in the application's data.
 
